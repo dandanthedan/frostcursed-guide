@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frostcursed Armor Set — Crimson Desert Walkthrough</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0e17;
+      --card: #111827;
+      --card-hover: #1a2332;
+      --accent: #4fc3f7;
+      --accent-glow: rgba(79, 195, 247, 0.15);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #1e293b;
+      --frost: #a5f3fc;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(180deg, rgba(10,14,23,0) 0%, var(--bg) 100%), 
+                  url('https://www.powerpyx.com/wp-content/uploads/crimson-desert-full-world-map.jpg') center/cover no-repeat;
+      min-height: 56vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2rem 1.25rem 2.5rem;
+      position: relative;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,14,23,0.3) 0%, rgba(10,14,23,0.95) 100%);
+      pointer-events: none;
+    }
+
+    .header-content { position: relative; z-index: 1; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(79,195,247,0.12);
+      border: 1px solid rgba(79,195,247,0.3);
+      color: var(--accent);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #fff 30%, var(--frost));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.6rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 420px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.6rem 1rem;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stat strong { color: #fff; font-size: 0.9rem; }
+    .stat span { color: var(--text-muted); }
+
+    /* MAP SECTION */
+    .map-section {
+      padding: 1.5rem 1.25rem;
+    }
+
+    .map-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .map-card img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .map-label {
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    .region-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(79,195,247,0.1);
+      color: var(--accent);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+    }
+
+    /* OVERVIEW */
+    .overview {
+      padding: 0 1.25rem 1rem;
+    }
+
+    .overview p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* ARMOR CARDS */
+    .armor-list {
+      padding: 0 1.25rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .armor-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .armor-card:target {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 0 24px var(--accent-glow);
+    }
+
+    .armor-card:target .armor-header { background: rgba(79,195,247,0.08); }
+
+    .armor-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 1.1rem 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s;
+    }
+
+    .piece-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1a3a4a 0%, #0d2233 100%);
+      border: 1px solid rgba(79,195,247,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .armor-info { flex: 1; min-width: 0; }
+
+    .piece-label {
+      font-size: 0.65rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.15rem;
+    }
+
+    .piece-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .piece-location {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .expand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: transform 0.25s, background 0.2s;
+    }
+
+    .armor-card.open .expand-icon {
+      transform: rotate(180deg);
+      background: rgba(79,195,247,0.15);
+      color: var(--accent);
+    }
+
+    .armor-body {
+      display: none;
+      padding: 0 1.1rem 1.1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .armor-card.open .armor-body { display: block; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 0.9rem;
+      padding-top: 0.9rem;
+    }
+
+    .piece-stat {
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 0.5rem 0.7rem;
+      text-align: center;
+    }
+
+    .piece-stat .val {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .piece-stat .lbl {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.1rem;
+    }
+
+    .steps { display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .step {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(79,195,247,0.12);
+      border: 1px solid rgba(79,195,247,0.3);
+      color: var(--accent);
+      font-size: 0.65rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .step strong { color: var(--text); }
+
+    .tip-box {
+      background: rgba(79,195,247,0.07);
+      border: 1px solid rgba(79,195,247,0.2);
+      border-radius: 10px;
+      padding: 0.7rem 0.9rem;
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+    }
+
+    .tip-box::before { content: '💡'; flex-shrink: 0; margin-top: 0.05rem; }
+
+    /* REGION QUICKLINKS */
+    .region-nav {
+      padding: 0 1.25rem 1.5rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .region-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .region-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem 1.25rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-content">
+    <div class="badge">❄️ Ice Resistance Set</div>
+    <h1>Frostcursed<br>Armor Set</h1>
+    <p class="subtitle">Complete walkthrough for all 5 pieces in Crimson Desert — Demeniss region</p>
+    <div class="stats-row">
+      <div class="stat"><strong>5</strong> <span>Pieces</span></div>
+      <div class="stat"><strong>Demeniss</strong> <span>Region</span></div>
+      <div class="stat"><strong>Ice Res Lv7</strong> <span>Set Bonus</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- MAP -->
+<section class="map-section">
+  <div class="map-card">
+    <img src="https://www.powerpyx.com/wp-content/uploads/crimson-desert-full-world-map.jpg" alt="Crimson Desert World Map — Demeniss region highlighted">
+    <div class="map-label">
+      Crimson Desert World Map — All 5 armor pieces are located in the western side of <strong style="color:var(--frost)">Demeniss</strong> <span class="region-tag">📍 Western Demeniss</span>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="overview">
+  <p>The Frostcursed Armor Set is essential for surviving the <strong style="color:var(--frost)">Spire of Frost</strong> dungeon and other ice-cold areas of Demeniss. Each piece provides <strong style="color:#fff">Ice Resistance Lv 7</strong>, making it the best cold-weather gear in the game. Start in the <strong style="color:#fff">northwest of Demeniss</strong> at Deadfire Mountain and work your way south.</p>
+</section>
+
+<!-- REGION NAV -->
+<nav class="region-nav">
+  <a href="#helm" class="region-btn">🪖 Helm</a>
+  <a href="#gloves" class="region-btn">🧤 Gloves</a>
+  <a href="#cloak" class="region-btn">🧥 Cloak</a>
+  <a href="#armor" class="region-btn">🦺 Armor</a>
+  <a href="#boots" class="region-btn">👢 Boots</a>
+</nav>
+
+<!-- ARMOR PIECES -->
+<section class="armor-list">
+
+  <!-- HELM -->
+  <div class="armor-card open" id="helm">
+    <a class="armor-header" href="#helm" onclick="event.preventDefault(); this.closest('.armor-card').classList.toggle('open')">
+      <div class="piece-icon">🪖</div>
+      <div class="armor-info">
+        <div class="piece-label">Piece 01 — Head</div>
+        <div class="piece-name">Frostcursed Plate Helm</div>
+        <div class="piece-location">📍 Chattering Rocks</div>
+      </div>
+      <div class="expand-icon">▼</div>
+    </a>
+    <div class="armor-body">
+      <div class="stats-grid">
+        <div class="piece-stat"><div class="val">5</div><div class="lbl">Defense</div></div>
+        <div class="piece-stat"><div class="val">3</div><div class="lbl">Refinement</div></div>
+        <div class="piece-stat"><div class="val">Daze Immune</div><div class="lbl">Special</div></div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>Head to the <strong>north region of Demeniss</strong>, above the "D" in "Demeniss" on the map. Look for <strong style="color:var(--frost)">Chattering Rocks</strong>.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>Locate the wall covered in <strong style="color:#fff">green vines</strong> blocking the entrance. Use <strong style="color:var(--frost)">Blinding Flash</strong> (L1+R1+L1) to burn the vines away.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>Push through into the newly revealed room. The <strong style="color:var(--frost)">Treasure Chest</strong> glows from the outside — it's yours.</div>
+        </div>
+      </div>
+      <div class="tip-box">Watch out for tough <strong>rock monsters</strong> guarding Chattering Rocks. Either avoid them by sneaking straight to the loot, or prepare for a fight.</div>
+    </div>
+  </div>
+
+  <!-- GLOVES -->
+  <div class="armor-card" id="gloves">
+    <a class="armor-header" href="#gloves" onclick="event.preventDefault(); this.closest('.armor-card').classList.toggle('open')">
+      <div class="piece-icon">🧤</div>
+      <div class="armor-info">
+        <div class="piece-label">Piece 02 — Hands</div>
+        <div class="piece-name">Frostcursed Plate Gloves</div>
+        <div class="piece-location">📍 Lunar Spirit Grotto</div>
+      </div>
+      <div class="expand-icon">▼</div>
+    </a>
+    <div class="armor-body">
+      <div class="stats-grid">
+        <div class="piece-stat"><div class="val">4</div><div class="lbl">Defense</div></div>
+        <div class="piece-stat"><div class="val">2</div><div class="lbl">Refinement</div></div>
+        <div class="piece-stat"><div class="val">Ice Res Lv7</div><div class="lbl">Special</div></div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>Go to the <strong style="color:var(--frost)">Lunar Spirit Grotto</strong> on the <strong style="color:#fff">Denn River</strong>. Look for the <strong style="color:#fff">break in the river</strong> marked on your map — that's the waterfall entrance.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>Enter the waterfall from the <strong style="color:#fff">left side</strong>. There's a small opening that doesn't span the whole falls.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>Look for the <strong style="color:var(--frost)">Stacked Stones</strong> to confirm you're in the right area. The gloves are behind the waterfall, near the <strong style="color:#fff">Stones of Time</strong>.</div>
+        </div>
+      </div>
+      <div class="tip-box">The waterfall entrance is subtle — look for the gap in the water flow on the <strong>left side only</strong>. The stacked stones are your landmark.</div>
+    </div>
+  </div>
+
+  <!-- CLOAK -->
+  <div class="armor-card" id="cloak">
+    <a class="armor-header" href="#cloak" onclick="event.preventDefault(); this.closest('.armor-card').classList.toggle('open')">
+      <div class="piece-icon">🧥</div>
+      <div class="armor-info">
+        <div class="piece-label">Piece 03 — Back</div>
+        <div class="piece-name">Frostcursed Plate Cloak</div>
+        <div class="piece-location">📍 Sanctum of Expiation</div>
+      </div>
+      <div class="expand-icon">▼</div>
+    </a>
+    <div class="armor-body">
+      <div class="stats-grid">
+        <div class="piece-stat"><div class="val">6</div><div class="lbl">Defense</div></div>
+        <div class="piece-stat"><div class="val">2</div><div class="lbl">Refinement</div></div>
+        <div class="piece-stat"><div class="val">Ice Res Lv7</div><div class="lbl">Special</div></div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>Enter the <strong style="color:var(--frost)">Sanctum of Expiation</strong>. This is controlled by the <strong style="color:#fff">Antumbra Order</strong> — clear them out first if you want an easier time.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>Once inside, find the <strong style="color:#fff">half wall with thorn roots</strong> covering the open bottom section. It's along the <strong style="color:#fff">right wall</strong>, not too far from the main entrance stairs.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>Position yourself in a <strong style="color:#fff">corner</strong>, then use <strong style="color:var(--frost)">Blinding Light</strong> to burn the roots. Crouch and go through the small path — watch for <strong style="color:var(--danger)">spike traps</strong> on the floor.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div>Turn right, head back toward where you came from. The treasure chest is at the end. <strong style="color:var(--danger)">Warning:</strong> If you trigger the spike trap, you'll need to fast travel out.</div>
+        </div>
+      </div>
+      <div class="tip-box">The floor near the entrance <strong>crumbles when you stand on it</strong>. Move carefully, don't linger near the entrance stairs.</div>
+    </div>
+  </div>
+
+  <!-- ARMOR -->
+  <div class="armor-card" id="armor">
+    <a class="armor-header" href="#armor" onclick="event.preventDefault(); this.closest('.armor-card').classList.toggle('open')">
+      <div class="piece-icon">🦺</div>
+      <div class="armor-info">
+        <div class="piece-label">Piece 04 — Chest</div>
+        <div class="piece-name">Frostcursed Plate Armor</div>
+        <div class="piece-location">📍 Mistshard Cave</div>
+      </div>
+      <div class="expand-icon">▼</div>
+    </a>
+    <div class="armor-body">
+      <div class="stats-grid">
+        <div class="piece-stat"><div class="val">14</div><div class="lbl">Defense</div></div>
+        <div class="piece-stat"><div class="val">3</div><div class="lbl">Refinement</div></div>
+        <div class="piece-stat"><div class="val">Ice Res Lv7</div><div class="lbl">Special</div></div>
+        <div class="piece-stat"><div class="val">Lv 2</div><div class="lbl">Move Speed</div></div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>Go to <strong style="color:var(--frost)">Mistshard Cave</strong> in the far north of <strong style="color:#fff">Demeniss</strong>, within the <strong style="color:#fff">Smoking Lands</strong>. Head north of <strong style="color:#fff">Deadfire Mountain</strong> to find the waterfall.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>Enter through the <strong style="color:#fff">upper right bank</strong>. Behind the waterfall is a wall that looks solid.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>Use <strong style="color:var(--frost)">Mine</strong> or <strong style="color:var(--frost)">Force Palm</strong> on the <strong style="color:#fff">center of the wall</strong> to open a golden passage.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div>Follow the passage down to the cave interior. The chest with your armor is inside, along with multiple <strong style="color:var(--frost)">Gold Ore</strong> nodes.</div>
+        </div>
+      </div>
+      <div class="tip-box">This is the <strong>highest defense piece</strong> of the set (+14 defense). Prioritize this if you're only going for one item. Mistshard Cave is the toughest location — bring healing items.</div>
+    </div>
+  </div>
+
+  <!-- BOOTS -->
+  <div class="armor-card" id="boots">
+    <a class="armor-header" href="#boots" onclick="event.preventDefault(); this.closest('.armor-card').classList.toggle('open')">
+      <div class="piece-icon">👢</div>
+      <div class="armor-info">
+        <div class="piece-label">Piece 05 — Feet</div>
+        <div class="piece-name">Frostcursed Plate Boots</div>
+        <div class="piece-location">📍 Well of Tragedy Grotto</div>
+      </div>
+      <div class="expand-icon">▼</div>
+    </a>
+    <div class="armor-body">
+      <div class="stats-grid">
+        <div class="piece-stat"><div class="val">5</div><div class="lbl">Defense</div></div>
+        <div class="piece-stat"><div class="val">2</div><div class="lbl">Refinement</div></div>
+        <div class="piece-stat"><div class="val">Ice Res Lv7</div><div class="lbl">Special</div></div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>Go to <strong style="color:var(--frost)">Well of Tragedy Grotto</strong>. Head to the <strong style="color:#fff">bottom of the waterfall</strong> — no need to climb the ravine walls along the river.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>Walk through the <strong style="color:#fff">waterfall toward the center</strong>. You'll end up in a small passage leading to a treasure room.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>The treasure chest is <strong style="color:var(--frost)">dead center</strong> of the room. Other chests are off to the side — grab everything.</div>
+        </div>
+      </div>
+      <div class="tip-box">The easiest chest of the set — straightforward waterfall entrance with no puzzles or traps. Grab it last on your way south from Deadfire Mountain.</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- SET BONUS -->
+<section style="padding: 0 1.25rem 2rem;">
+  <div style="background: linear-gradient(135deg, rgba(79,195,247,0.08) 0%, rgba(79,195,247,0.03) 100%); border: 1px solid rgba(79,195,247,0.25); border-radius: 16px; padding: 1.25rem;">
+    <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; margin-bottom: 0.5rem;">❄️ Complete Set Bonus</div>
+    <div style="font-family: 'Cinzel', serif; font-size: 1.1rem; color: #fff; margin-bottom: 0.6rem;">Ice Resistance Lv 7 + Chilling Death Immunity</div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">With all 5 pieces equipped, you gain <strong style="color:#fff">Ice Resistance Lv 7</strong> — making the <strong style="color:var(--frost)">Spire of Frost</strong> dungeon and the frozen wastes of western Demeniss fully traversable without freezing to death. The set also protects against <strong style="color:#fff">chilling death</strong> mechanics in high-altitude and deep-winter areas.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p style="margin-bottom: 0.4rem;">Guide sources: <a href="https://www.ign.com/wikis/crimson-desert" target="_blank">IGN</a> · <a href="https://gamerant.com/crimson-desert-frostcursed-armor-set-locations/" target="_blank">GameRant</a></p>
+  <p>Frostcursed Armor Set · Crimson Desert · 2026</p>
+</footer>
+
+<script>
+  // Auto-open the hash target on load
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) target.classList.add('open');
+  }
+</script>
+
+</body>
+</html>
